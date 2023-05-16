@@ -28,5 +28,8 @@
         "psr-4": {
             "Tests\\": "tests/"
         }
+    },
+    "require-dev": {
+        "filp/whoops": "^2.15"
     }
 }

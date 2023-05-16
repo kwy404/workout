@@ -14,6 +14,6 @@ class HomeController
 
         //View on resources/views/welcome.blade.php
         // welcome pass on makeView
-        return new Response(BladeConfig::makeView('welcome', compact('name', 'age')));
+        return new Response(BladeConfig::makeView('welcome2', compact('name', 'age')));
     }
 }
