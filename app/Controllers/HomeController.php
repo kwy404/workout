@@ -7,13 +7,6 @@ use Symfony\Component\HttpFoundation\Response;
 
 class HomeController
 {
-    private $blade;
-
-    public function __construct()
-    {
-        $this->blade = BladeConfig::getBladeInstance();
-    }
-
     public function index()
     {
         $name = 'kwy404';
@@ -24,7 +17,7 @@ class HomeController
             'age' => $age
         ];
 
-        $html = $this->blade->make('welcome', $viewData)->render();
+        $html = BladeConfig::makeView('welcome', $viewData);
 
         return new Response($html);
     }

@@ -17,4 +17,10 @@ class BladeConfig
 
         return new Blade($viewsPath, $cachePath);
     }
+
+    public static function makeView($view, $data = [])
+    {
+        $blade = self::getBladeInstance();
+        return $blade->make($view, $data)->render();
+    }
 }
