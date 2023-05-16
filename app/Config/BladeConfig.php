@@ -23,4 +23,10 @@ class BladeConfig
         $blade = self::getBladeInstance();
         return $blade->make($view, $data)->render();
     }
+
+    public static function makeViewWithCompact($view, ...$variables)
+    {
+        $data = compact(...$variables);
+        return self::makeView($view, $data);
+    }
 }
