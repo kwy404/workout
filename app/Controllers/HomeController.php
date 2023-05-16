@@ -2,17 +2,20 @@
 
 namespace App\Controllers;
 
-use Jenssegers\Blade\Blade;
+use App\Config\BladeConfig;
 use Symfony\Component\HttpFoundation\Response;
 
 class HomeController
 {
+    private $blade;
+
+    public function __construct()
+    {
+        $this->blade = BladeConfig::getBladeInstance();
+    }
+
     public function index()
     {
-        $viewsPath = __DIR__ . '/../../resources/views';
-        $cachePath = __DIR__ . '/../../storage/cache/views';
-        $blade = new Blade($viewsPath, $cachePath);
-
         $name = 'kwy404';
         $age = 23;
 
@@ -21,7 +24,7 @@ class HomeController
             'age' => $age
         ];
 
-        $html = $blade->make('welcome', $viewData)->render();
+        $html = $this->blade->make('welcome', $viewData)->render();
 
         return new Response($html);
     }
