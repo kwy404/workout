@@ -12,8 +12,6 @@ class HomeController
         $name = 'kwy404';
         $age = 23;
 
-        $html = BladeConfig::makeView('welcome', compact('name', 'age'));
-
-        return new Response($html);
+        return new Response(BladeConfig::makeView('welcome', compact('name', 'age')));
     }
 }
