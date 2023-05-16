@@ -1,0 +1,31 @@
+{
+    "name": "kwy404/workout",
+    "description": "framework php",
+    "authors": [
+        {
+            "name": "kwy404",
+            "email": "thekaway404@gmail.com"
+        }
+    ],
+    "require": {
+        "illuminate/container": "^8.0",
+        "illuminate/view": "^8.0",
+        "symfony/routing": "^5.0",
+        "symfony/http-foundation": "^5.0",
+        "illuminate/config": "^8.0",
+        "monolog/monolog": "^3.3",
+        "vlucas/phpdotenv": "^5.5",
+        "jenssegers/blade": "^1.4"
+    },
+    "autoload": {
+        "psr-4": {
+            "App\\": "app/",
+            "App\\Routing\\": "src/Routing/"
+        }
+    },    
+    "autoload-dev": {
+        "psr-4": {
+            "Tests\\": "tests/"
+        }
+    }
+}
