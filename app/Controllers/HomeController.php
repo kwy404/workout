@@ -12,6 +12,8 @@ class HomeController
         $name = 'kwy404';
         $age = 23;
 
+        //View on resources/views/welcome.blade.php
+        // welcome pass on makeView
         return new Response(BladeConfig::makeView('welcome', compact('name', 'age')));
     }
 }
