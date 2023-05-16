@@ -18,4 +18,3 @@
 
 # Ignorar arquivos de configuração do ambiente
 .env
-.env.example
