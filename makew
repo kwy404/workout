@@ -1,0 +1,66 @@
+<?php
+
+class ControllerCreator
+{
+    private $controllerName;
+    private $namespace;
+    private $filePath;
+
+    public function __construct($command, $controllerName)
+    {
+        if ($command === 'create-controller') {
+            $this->controllerName = ucfirst($controllerName) . 'Controller';
+            $this->namespace = 'App\Controllers';
+            $this->filePath = __DIR__ . '/app/Controllers/' . $this->controllerName . '.php';
+
+            $this->createController();
+        } else {
+            echo "Comando inválido. Use 'create-controller' para criar um novo controlador.";
+        }
+    }
+
+    private function createController()
+    {
+        $code = <<<PHP
+<?php
+
+namespace $this->namespace;
+
+use App\Config\BladeConfig;
+use Symfony\Component\HttpFoundation\Response;
+
+class $this->controllerName
+{
+    private \$blade;
+
+    public function __construct()
+    {
+        \$this->blade = BladeConfig::getBladeInstance();
+    }
+
+    public function index()
+    {
+        \$html = \$this->blade->make('welcome')->render();
+
+        return new Response(\$html);
+    }
+}
+PHP;
+
+        if (!file_exists($this->filePath)) {
+            file_put_contents($this->filePath, $code);
+            echo "Controller '$this->controllerName' criado com sucesso em '$this->filePath'.";
+        } else {
+            echo "O arquivo '$this->filePath' já existe. Por favor, escolha outro nome para o controlador.";
+        }
+    }
+}
+
+if (isset($argv[1]) && isset($argv[2])) {
+    $command = $argv[1];
+    $controllerName = $argv[2];
+
+    $controllerCreator = new ControllerCreator($command, $controllerName);
+} else {
+    echo "Por favor, forneça o comando 'create-controller' seguido pelo nome do controlador como argumentos. Exemplo: php makew create-controller controllername";
+}
