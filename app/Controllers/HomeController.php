@@ -9,11 +9,11 @@ class HomeController
 {
     public function index()
     {
-        $name = 'kwy404';
-        $age = 23;
+        $logo = 'Workout';
+        $descricao = "Um framework PHP para desenvolvimento web";
 
         //View on resources/views/welcome.blade.php
         // welcome pass on makeView
-        return new Response(BladeConfig::makeView('welcome', compact('name', 'age')));
+        return new Response(BladeConfig::makeView('welcome', compact('logo', 'descricao')));
     }
 }
