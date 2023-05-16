@@ -20,7 +20,9 @@ class Router
         $handler = $this->routes[$path] ?? null;
 
         if ($handler === null) {
-            return new Response('404 Not Found', 404);
+            include '../resources/views/404.php'; 
+            $content = ob_get_clean();
+            return new Response($content, 404);
         }
 
         if (is_callable($handler)) {
