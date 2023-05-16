@@ -12,12 +12,7 @@ class HomeController
         $name = 'kwy404';
         $age = 23;
 
-        $viewData = [
-            'name' => $name,
-            'age' => $age
-        ];
-
-        $html = BladeConfig::makeView('welcome', $viewData);
+        $html = BladeConfig::makeView('welcome', compact('name', 'age'));
 
         return new Response($html);
     }
