@@ -24,27 +24,22 @@ class ControllerCreator
         $code = <<<PHP
 <?php
 
-namespace $this->namespace;
+namespace App\Controllers;
 
 use App\Config\BladeConfig;
 use Symfony\Component\HttpFoundation\Response;
 
-class $this->controllerName
+class HomeController
 {
-    private \$blade;
-
-    public function __construct()
-    {
-        \$this->blade = BladeConfig::getBladeInstance();
-    }
-
     public function index()
     {
-        \$html = \$this->blade->make('welcome')->render();
+
+        \$html = BladeConfig::makeView('welcome', compact(''));
 
         return new Response(\$html);
     }
 }
+
 PHP;
 
         if (!file_exists($this->filePath)) {
