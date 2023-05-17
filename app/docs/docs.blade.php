@@ -23,7 +23,7 @@
     <style>
         text {
             padding: 10px;
-            opacity: 0.8;
+            opacity: 0.3;
             position: fixed;
             bottom: 10px;
             z-index: 1;
@@ -38,6 +38,9 @@
         #output{
             font-size: 15px;
             font-weight: bold;
+            padding-bottom: 80px;
+            z-index: 10;
+            position: relative;
         }
     </style>
 
@@ -93,10 +96,10 @@
         }
 
         // Função para exibir a resposta da rota no output
-        function showResponse(response) {
+        function showResponse(response, route) {
             var outputElement = document.getElementById('output');
             var json = JSON.stringify(response, null, 2);
-            outputElement.textContent = JSON.stringify(response, null, 2);
+            outputElement.innerHTML = `<h4>Você clicou em testar a rota: <span class="badge">${route}</span></h4> <br><h2>Reponse</h2><br> ${JSON.stringify(response, null, 2)}`;
         }
 
         // Função para fazer a requisição na rota e exibir a resposta
@@ -107,7 +110,7 @@
                     return response.json();
                 })
                 .then(function(data) {
-                    showResponse(data);
+                    showResponse(data, route);
                 })
                 .catch(function(error) {
                     outputElement.textContent = "Não é uma resposta válida, a rota tem que enviar algum JSON válido."
