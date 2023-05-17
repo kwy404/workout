@@ -12,8 +12,8 @@ class HomeController
         $logo = 'Workout';
         $descricao = "Um framework PHP para desenvolvimento web";
 
-        //View on resources/views/welcome.blade.php
-        // welcome pass on makeView
-        return new Response(BladeConfig::makeView('welcome', compact('logo', 'descricao')));
+        // Renderiza o template Blade e passa as variáveis para ele
+        $content = BladeConfig::makeView('welcome', compact('logo', 'descricao'));
+        return new Response($content);
     }
 }
