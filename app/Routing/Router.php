@@ -100,7 +100,6 @@ class Router
                 break;
             }
         }
-
         return $routeParams;
     }
 
