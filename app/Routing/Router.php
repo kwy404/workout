@@ -19,7 +19,7 @@ class Router
     {
         // Obtém o método e o caminho da solicitação recebida
         $method = $request->getMethod();
-        $path = $request->getPathInfo();
+        $path = rtrim($request->getPathInfo(), '/'); // Remove a barra final, se houver
 
         // Verifica se existe um manipulador de rota para o método e caminho correspondentes
         $handler = $this->findRouteHandler($method, $path);
@@ -116,7 +116,10 @@ class Router
             // Se a rota for apenas a barra, retorna o padrão correspondente
             return '/^\/$/';
         }
-    
+
+        // Remove uma barra opcional no final do caminho da rota
+        $routePath = rtrim($routePath, '/');
+
         // Transforma o caminho da rota em um padrão de expressão regular
         $pattern = preg_replace('/\//', '\/', $routePath);
         $pattern = preg_replace('/\{(\w+)\}/', '(?P<$1>[^\/]+)', $pattern);
