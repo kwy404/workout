@@ -5,9 +5,8 @@ use App\Controllers\HomeController;
 
 $router = new Router();
 
-$router->addRoute('/', [HomeController::class, 'index']);
-$router->addRoute('/welcome', [HomeController::class, 'index']);
-
-$router->addRoute('/user/{id}/{token}', [UserController::class, 'show']);
+$router->addRoute('GET', '/', [HomeController::class, 'index']);
+$router->addRoute('GET', '/welcome', [HomeController::class, 'index']);
+$router->addRoute('GET', '/user/{id}/{token}', [UserController::class, 'show']);
 
 return $router;

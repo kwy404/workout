@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Routing;
 
 use Symfony\Component\HttpFoundation\Request;
@@ -8,19 +9,20 @@ class Router
 {
     private $routes = [];
 
-    public function addRoute(string $path, $handler)
+    public function addRoute(string $method, string $path, $handler)
     {
-        // Adiciona uma nova rota ao array de rotas
-        $this->routes[$path] = $handler;
+        // Adiciona uma nova rota ao array de rotas, usando o método HTTP como chave
+        $this->routes[$method][$path] = $handler;
     }
 
     public function dispatch(Request $request): Response
     {
-        // Obtém o caminho da solicitação recebida
+        // Obtém o método e o caminho da solicitação recebida
+        $method = $request->getMethod();
         $path = $request->getPathInfo();
 
-        // Encontra o manipulador de rota para o caminho
-        $handler = $this->findRouteHandler($path);
+        // Verifica se existe um manipulador de rota para o método e caminho correspondentes
+        $handler = $this->findRouteHandler($method, $path);
 
         if ($handler === null) {
             // Se não houver um manipulador correspondente, retorna uma resposta 404 (Página não encontrada)
@@ -60,7 +62,7 @@ class Router
         return new Response('500 Internal Server Error', 500);
     }
 
-    private function findRouteHandler(string $path)
+    private function findRouteHandler(string $method, string $path)
     {
         // Remove a barra final, se houver, para evitar inconsistências
         $path = rtrim($path, '/');
@@ -69,21 +71,23 @@ class Router
             $path = '/';
         }
 
-        foreach ($this->routes as $routePath => $handler) {
-            if ($routePath === $path) {
-                // Se houver uma correspondência exata do caminho da rota, retorna o manipulador
-                return $handler;
-            }
+        if (isset($this->routes[$method])) {
+            foreach ($this->routes[$method] as $routePath => $handler) {
+                if ($routePath === $path) {
+                    // Se houver uma correspondência exata do caminho da rota, retorna o manipulador
+                    return $handler;
+                }
 
-            $pattern = $this->getRoutePattern($routePath);
-            if (preg_match($pattern, $path, $matches)) {
-                // Se o caminho corresponder a um padrão de rota, retorna o manipulador
-                array_shift($matches);
-                return $handler;
+                $pattern = $this->getRoutePattern($routePath);
+                if (preg_match($pattern, $path, $matches)) {
+                    // Se o caminho corresponder a um padrão de rota, retorna o manipulador
+                    array_shift($matches);
+                    return $handler;
+                }
             }
         }
 
-        // Se nenhum manipulador for encontrado para o caminho, retorna null
+        // Se nenhum manipulador for encontrado para o método e caminho, retorna null
         return null;
     }
 
@@ -91,15 +95,18 @@ class Router
     {
         $routeParams = [];
 
-        foreach ($this->routes as $routePath => $handler) {
-            $pattern = $this->getRoutePattern($routePath);
-            if (preg_match($pattern, $path, $matches)) {
-                // Se o caminho corresponder a um padrão de rota, extrai os parâmetros da rota
-                array_shift($matches);
-                $routeParams = $matches;
-                break;
+        foreach ($this->routes as $method => $routes) {
+            foreach ($routes as $routePath => $handler) {
+                $pattern = $this->getRoutePattern($routePath);
+                if (preg_match($pattern, $path, $matches)) {
+                    // Se o caminho corresponder a um padrão de rota, extrai os parâmetros da rota
+                    array_shift($matches);
+                    $routeParams = $matches;
+                    break;
+                }
             }
         }
+        
         return $routeParams;
     }
 
@@ -116,4 +123,3 @@ class Router
         return '/^' . $pattern . '$/';
     }
 }
-
