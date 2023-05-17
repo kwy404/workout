@@ -3,7 +3,7 @@
 <head>
     <title>Workout Routes Documentation</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.0/jquery.min.js" integrity="sha512-3gJwYpMe3QewGELv8k/BX9vcqhryRdzRMxVfq6ngyWXwo03GFEzjsUm8Q7RZcHPHksttq7/GFoxjCVUjkjvPdw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-        <!-- Latest compiled and minified CSS -->
+    <!-- Latest compiled and minified CSS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
 
     <!-- Optional theme -->
@@ -13,12 +13,15 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
 </head>
 <body>
-    <div class="container"><h1>Workout Routes Documentation</h1></h1>
-
-    <div id="routes" class="container"></div>
+    <div class="container">
+        <h1>Workout Routes Documentation</h1>
+        <div id="routes" class="container"></div>
+        <h3>A resposta será mostrada aqui</h3>
+        <div id="output">Clique em "Testar" em alguma rota para ver o resultado.</div>
+    </div>
 
     <style>
-        text{
+        text {
             padding: 10px;
             opacity: 0.8;
             position: fixed;
@@ -26,7 +29,18 @@
             z-index: 1;
             user-select: none;
         }
+
+        .btn-primary{
+            display: block;
+            margin: 15px;
+        }
+
+        #output{
+            font-size: 15px;
+            font-weight: bold;
+        }
     </style>
+
     <script>
         // Função para exibir as rotas na tela
         function showRoutes(routes) {
@@ -54,6 +68,7 @@
                     var typeMethods = document.createElement('div');
                     typeMethods.classList.add('badge', 'bg-primary');
                     typeMethods.textContent = method;
+
                     li.appendChild(typeMethods);
 
                     var routeElement = document.createElement('span');
@@ -61,11 +76,43 @@
                     routeElement.innerHTML = "<strong>" + route + "</strong>";
                     li.appendChild(routeElement);
 
+                    var testButton = document.createElement('button');
+                    testButton.classList.add('btn', 'btn-primary', 'btn-sm');
+                    testButton.textContent = 'Testar';
+
+                    testButton.addEventListener('click', function() {
+                        testRoute(route);
+                    });
+
+                    li.appendChild(testButton);
                     ul.appendChild(li);
                 });
 
                 routesDiv.appendChild(ul);
             });
+        }
+
+        // Função para exibir a resposta da rota no output
+        function showResponse(response) {
+            var outputElement = document.getElementById('output');
+            var json = JSON.stringify(response, null, 2);
+            outputElement.textContent = JSON.stringify(response, null, 2);
+        }
+
+        // Função para fazer a requisição na rota e exibir a resposta
+        function testRoute(route) {
+            var outputElement = document.getElementById('output');
+            fetch(route)
+                .then(function(response) {
+                    return response.json();
+                })
+                .then(function(data) {
+                    showResponse(data);
+                })
+                .catch(function(error) {
+                    outputElement.textContent = "Não é uma resposta válida, a rota tem que enviar algum JSON válido."
+                    console.log(error);
+                });
         }
 
         // Fazer a requisição GET para a rota /workoutjson
@@ -76,10 +123,9 @@
             .then(function(data) {
                 showRoutes(data.paths);
             })
-            .catch(function(error){
+            .catch(function(error) {
                 console.log(error);
             });
     </script>
-
 </body>
 </html>

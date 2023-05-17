@@ -15,6 +15,7 @@ class Router
         if ($path === '/docs' || $path === '/workoutjson') {
             throw new \Exception("Cannot create routes for native Workout paths");
         }
+        $this->routes['GET']['/workoutjson'] = $handler;
         // Adiciona uma nova rota ao array de rotas, usando o método HTTP como chave
         $this->routes[$method][$path] = $handler;
     }
