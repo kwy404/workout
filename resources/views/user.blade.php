@@ -51,7 +51,7 @@
 <body>
     <div class="container">
         <div class="text">
-            <h3>{{ $id }}</h3>
+            <h3>id - {{ $id }} - token {{ $token }}</h3>
         </div>
     </div>
 </body>

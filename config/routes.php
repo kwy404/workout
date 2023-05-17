@@ -8,6 +8,6 @@ $router = new Router();
 $router->addRoute('/', [HomeController::class, 'index']);
 $router->addRoute('/welcome', [HomeController::class, 'index']);
 
-$router->addRoute('/user/{id}', [UserController::class, 'show']);
+$router->addRoute('/user/{id}/{token}', [UserController::class, 'show']);
 
 return $router;

@@ -10,7 +10,8 @@ class UserController
     public function show($params)
     {
         $id = $params[0];
-        $html = BladeConfig::makeView('user', compact('id'));
+        $token = $params[1];
+        $html = BladeConfig::makeView('user', compact('id', 'token'));
 
         return new Response($html);
     }
