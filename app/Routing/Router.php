@@ -4,6 +4,7 @@ namespace App\Routing;
 
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use App\Config\BladeConfig;
 
 class Router
 {
@@ -21,8 +22,20 @@ class Router
         $method = $request->getMethod();
         $path = rtrim($request->getPathInfo(), '/'); // Remove a barra final, se houver
 
+        if ($path === '/workoutjson' && $method === 'GET') {
+            // Rota especial para retornar todas as rotas em JSON
+            $routesData = $this->getAllRoutesData();
+            return new Response($routesData, 200, ['Content-Type' => 'application/json']);
+        }
+
         // Verifica se existe um manipulador de rota para o método e caminho correspondentes
         $handler = $this->findRouteHandler($method, $path);
+
+        if ($path === '/docs' && $method === 'GET') {
+            // Rota especial para renderizar a página /app/docs/docs.blade.php com o template engine Blade
+            $content = $this->renderDocsPage();
+            return new Response($content, 200);
+        }
 
         if ($handler === null) {
             // Se não houver um manipulador correspondente, retorna uma resposta 404 (Página não encontrada)
@@ -30,6 +43,8 @@ class Router
             $content = ob_get_clean();
             return new Response($content, 404);
         }
+
+        
 
         if (is_callable($handler)) {
             // Se o manipulador for uma função anônima ou um método de classe estático, chama-o diretamente
@@ -65,6 +80,7 @@ class Router
     private function findRouteHandler(string $method, string $path)
     {
         // Remove a barra final, se houver, para evitar inconsistências
+       
         $path = rtrim($path, '/');
 
         if ($path === '') {
@@ -106,7 +122,7 @@ class Router
                 }
             }
         }
-        
+
         return $routeParams;
     }
 
@@ -124,5 +140,59 @@ class Router
         $pattern = preg_replace('/\//', '\/', $routePath);
         $pattern = preg_replace('/\{(\w+)\}/', '(?P<$1>[^\/]+)', $pattern);
         return '/^' . $pattern . '$/';
+    }
+
+    private function getAllRoutesData(): string
+    {
+        // Obtém o título e a descrição do arquivo .env
+        $title = env('APP_TITLE', 'Workout API');
+        $description = env('APP_DESCRIPTION', 'API');
+
+        $routesData = [
+            'workout' => '1.0.0',
+            'info' => [
+                'title' => $title,
+                'description' => $description,
+                'version' => '0.1'
+            ],
+            'paths' => []
+        ];
+
+        foreach ($this->routes as $method => $routes) {
+            foreach ($routes as $path => $handler) {
+                $routeData = [
+                    $path => [
+                        $method => [
+                            'summary' => 'Root',
+                            'operationId' => 'root__get',
+                            'responses' => [
+                                '200' => [
+                                    'description' => 'Successful Response',
+                                    'content' => [
+                                        'application/json' => [
+                                            'schema' => []
+                                        ]
+                                    ]
+                                ]
+                            ]
+                        ]
+                    ]
+                ];
+
+                $routesData['paths'] = array_merge_recursive($routesData['paths'], $routeData);
+            }
+        }
+
+        return json_encode($routesData, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
+    }
+
+    private function renderDocsPage(): string
+    {
+        // Aqui você pode adicionar a lógica para renderizar a página usando o template engine Blade
+        // Para simplificar o exemplo, vamos apenas retornar uma string com o conteúdo da página
+        // Renderiza o template Blade e passa as variáveis para ele
+        $routesData = $this->getAllRoutesData();
+        $content = BladeConfig::getDocsView();
+        return new Response($content);
     }
 }
