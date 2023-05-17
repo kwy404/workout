@@ -19,7 +19,12 @@
 
     <style>
         text{
-            display: none;
+            padding: 10px;
+            opacity: 0.8;
+            position: fixed;
+            bottom: 10px;
+            z-index: 1;
+            user-select: none;
         }
     </style>
     <script>
