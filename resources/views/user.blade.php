@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Bem-vindo ao Workut</title>
+    <title>User:{{ $id }}</title>
     <style>
         body {
             font-family: 'Arial', sans-serif;
