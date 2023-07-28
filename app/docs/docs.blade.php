@@ -47,39 +47,39 @@
     <script>
         // Função para exibir as rotas na tela
         function showRoutes(routes) {
-            var routesDiv = document.getElementById('routes');
+            const routesDiv = document.getElementById('routes');
 
             Object.keys(routes).forEach(function(route) {
-                var methods = routes[route];
+                const methods = routes[route];
 
-                var h2 = document.createElement('h2');
+                const h2 = document.createElement('h2');
                 h2.textContent = route;
                 routesDiv.appendChild(h2);
 
-                var ul = document.createElement('ul');
+                const ul = document.createElement('ul');
                 ul.classList.add('list-group');
 
                 Object.keys(methods).forEach(function(method) {
-                    var details = methods[method];
+                    const details = methods[method];
 
-                    var li = document.createElement('li');
+                    const li = document.createElement('li');
                     li.classList.add('list-group-item');
 
                     // Adicionar classe CSS para o método HTTP
                     li.classList.add('method-' + method.toLowerCase());
 
-                    var typeMethods = document.createElement('div');
+                    const typeMethods = document.createElement('div');
                     typeMethods.classList.add('badge', 'bg-primary');
                     typeMethods.textContent = method;
 
                     li.appendChild(typeMethods);
 
-                    var routeElement = document.createElement('span');
+                    const routeElement = document.createElement('span');
                     routeElement.classList.add('summary');
                     routeElement.innerHTML = "<strong>" + route + "</strong>";
                     li.appendChild(routeElement);
 
-                    var testButton = document.createElement('button');
+                    const testButton = document.createElement('button');
                     testButton.classList.add('btn', 'btn-primary', 'btn-sm');
                     testButton.textContent = 'Testar';
 
@@ -97,14 +97,14 @@
 
         // Função para exibir a resposta da rota no output
         function showResponse(response, route) {
-            var outputElement = document.getElementById('output');
-            var json = JSON.stringify(response, null, 2);
+            const outputElement = document.getElementById('output');
+            const json = JSON.stringify(response, null, 2);
             outputElement.innerHTML = `<h4>Você clicou em testar a rota: <span class="badge">${route}</span></h4> <br><h2>Reponse</h2><br> ${JSON.stringify(response, null, 2)}`;
         }
 
         // Função para fazer a requisição na rota e exibir a resposta
         function testRoute(route) {
-            var outputElement = document.getElementById('output');
+            const outputElement = document.getElementById('output');
             fetch(route)
                 .then(function(response) {
                     return response.json();
