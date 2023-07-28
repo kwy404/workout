@@ -24,12 +24,6 @@ class BladeConfig
         return $blade->make($view, $data)->render();
     }
 
-    public static function makeViewWithCompact($view, ...$variables)
-    {
-        $data = compact(...$variables);
-        return self::makeView($view, $data);
-    }
-
     public static function getDocsView()
     {
         $viewPath = realpath(__DIR__ . '/../../app/docs/docs.blade.php');

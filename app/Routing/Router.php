@@ -12,10 +12,10 @@ class Router
 
     public function addRoute(string $method, string $path, $handler)
     {
-        if ($path === '/docs' || $path === '/workoutjson') {
+        if ($path === '/docs' || $path === '/workout_json') {
             throw new \Exception("Cannot create routes for native Workout paths");
         }
-        $this->routes['GET']['/workoutjson'] = $handler;
+        $this->routes['GET']['/workout_json'] = $handler;
         // Adiciona uma nova rota ao array de rotas, usando o método HTTP como chave
         $this->routes[$method][$path] = $handler;
     }
@@ -26,7 +26,7 @@ class Router
         $method = $request->getMethod();
         $path = rtrim($request->getPathInfo(), '/'); // Remove a barra final, se houver
 
-        if ($path === '/workoutjson' && $method === 'GET') {
+        if ($path === '/workout_json' && $method === 'GET') {
             // Rota especial para retornar todas as rotas em JSON
             $routesData = $this->getAllRoutesData();
             return new Response($routesData, 200, ['Content-Type' => 'application/json']);
@@ -47,9 +47,7 @@ class Router
             $content = ob_get_clean();
             return new Response($content, 404);
         }
-
         
-
         if (is_callable($handler)) {
             // Se o manipulador for uma função anônima ou um método de classe estático, chama-o diretamente
             return call_user_func($handler);
@@ -192,9 +190,6 @@ class Router
 
     private function renderDocsPage(): string
     {
-        // Aqui você pode adicionar a lógica para renderizar a página usando o template engine Blade
-        // Para simplificar o exemplo, vamos apenas retornar uma string com o conteúdo da página
-        // Renderiza o template Blade e passa as variáveis para ele
         $routesData = $this->getAllRoutesData();
         $content = BladeConfig::getDocsView();
         return new Response($content);

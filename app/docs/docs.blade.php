@@ -119,7 +119,7 @@
         }
 
         // Fazer a requisição GET para a rota /workoutjson
-        fetch('/workoutjson')
+        fetch('/workout_json')
             .then(function(response) {
                 return response.json();
             })

@@ -29,7 +29,7 @@ namespace App\Controllers;
 use App\Config\BladeConfig;
 use Symfony\Component\HttpFoundation\Response;
 
-class HomeController
+class $this->controllerName
 {
     public function index()
     {
